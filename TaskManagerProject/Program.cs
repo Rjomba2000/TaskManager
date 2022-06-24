@@ -1,3 +1,3 @@
-﻿using TaskManager.Model;
+﻿using TaskManagerProject.Model;
 
 TaskManager manager = new TaskManager();

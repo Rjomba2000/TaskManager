@@ -1,4 +1,4 @@
-﻿namespace TaskManager.Model.IdTools;
+﻿namespace TaskManagerProject.Model.IdTools;
 
 public class IdGiver
 {

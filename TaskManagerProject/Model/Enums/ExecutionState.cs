@@ -1,4 +1,4 @@
-﻿namespace TaskManager.Model.Enums;
+﻿namespace TaskManagerProject.Model.Enums;
 
 public enum ExecutionState
 {

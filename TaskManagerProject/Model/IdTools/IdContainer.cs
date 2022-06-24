@@ -1,4 +1,4 @@
-﻿namespace TaskManager.Model.IdTools;
+﻿namespace TaskManagerProject.Model.IdTools;
 
 public class IdContainer<T>
 {
@@ -25,6 +25,21 @@ public class IdContainer<T>
         return null;
     }
 
+    public void DeleteElement(int deletedElementId)
+    {
+        foreach (var element in _elements)
+        {
+            if (element.Id == deletedElementId)
+            {
+                _elements.Remove(element);
+            }
+            else
+            {
+                element.DeleteElement(deletedElementId);
+            }
+        }
+    }
+    
     ~IdContainer()
     {
         _freeIdsGiver.KeepId(Id);
