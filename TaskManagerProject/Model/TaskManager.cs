@@ -52,7 +52,8 @@ public class TaskManager
             //error
         }
     }
-    
+
+    public IdContainer<Task> Tasks => _tasks;
     private IdContainer<Task> _tasks;
     private IdGiver _freeIdGiver = new IdGiver();
 }

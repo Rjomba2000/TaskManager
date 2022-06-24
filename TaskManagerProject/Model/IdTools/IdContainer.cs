@@ -53,4 +53,5 @@ public class IdContainer<T>
     private IdGiver _freeIdsGiver;
     public int Id { get; init; }
     private List<IdContainer<T>> _elements = new List<IdContainer<T>>();
+    public List<IdContainer<T>> Elements => _elements;
 }
