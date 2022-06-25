@@ -32,6 +32,7 @@ public class IdContainer<T>
             if (element.Id == deletedElementId)
             {
                 _elements.Remove(element);
+                return;
             }
             else
             {
