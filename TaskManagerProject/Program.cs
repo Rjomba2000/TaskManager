@@ -8,6 +8,6 @@ manager.AddSubtask(1, "srat");
 manager.AddSubtask(3, "srat2");
 manager.AddSubtask(3, "srat3");
 manager.CompleteTask(4);
-manager.CompleteTask(1);
+manager.CompleteTask(2);
 ConsoleDrawer.DrawAllTasks(manager);
 

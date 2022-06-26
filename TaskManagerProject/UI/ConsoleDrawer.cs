@@ -1,4 +1,5 @@
 ﻿using TaskManagerProject.Model.Enums;
+using TaskManagerProject.Model.IdTools;
 
 namespace TaskManagerProject.UI;
 using Spectre.Console;
@@ -8,8 +9,10 @@ public static class ConsoleDrawer
 {
     public static void DrawAllTasks(TaskManager taskManager)
     {
+        var taskList = taskManager.Tasks.Elements;
+        taskList.Sort(new TaskComparer());
         
-        foreach (var container in taskManager.Tasks.Elements)
+        foreach (var container in taskList)
         {
             var task = (Task)container;
             var root = new Tree(GetStyledTaskInfoString(task));
@@ -20,7 +23,10 @@ public static class ConsoleDrawer
 
     private static void DrawTasks(Tree parent, Task currentTask)
     {
-        foreach (var container in currentTask.Elements)
+        var taskList = currentTask.Elements;
+        taskList.Sort(new TaskComparer());
+        
+        foreach (var container in taskList)
         {
             var task = (Task)container;
             var child = new Tree(GetStyledTaskInfoString(task));
