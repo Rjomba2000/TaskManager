@@ -40,7 +40,7 @@ public class IdContainer<T>
             }
         }
     }
-    
+
     ~IdContainer()
     {
         _freeIdsGiver.KeepId(Id);
