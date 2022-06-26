@@ -1,15 +1,15 @@
 ﻿using System.Collections;
 using TaskManagerProject.Model.Enums;
 
-namespace TaskManagerProject.Model.IdTools;
+namespace TaskManagerProject.Model;
 
 public class TaskContainerEnumerator : IEnumerator
 {
-    private readonly List<IdTaskContainer> _completedTasks;
-    private readonly List<IdTaskContainer> _inProgressTasks;
+    private readonly List<Task> _completedTasks;
+    private readonly List<Task> _inProgressTasks;
     private int _position = -1;
 
-    public TaskContainerEnumerator(List<IdTaskContainer> completedTasks, List<IdTaskContainer> inProgressTasks)
+    public TaskContainerEnumerator(List<Task> completedTasks, List<Task> inProgressTasks)
     {
         _completedTasks = completedTasks;
         _inProgressTasks = inProgressTasks;

@@ -1,5 +1,4 @@
 ﻿using TaskManagerProject.Model.Enums;
-using TaskManagerProject.Model.IdTools;
 
 namespace TaskManagerProject.UI;
 using Spectre.Console;
@@ -9,9 +8,8 @@ public static class ConsoleDrawer
 {
     public static void DrawAllTasks(TaskManager taskManager)
     {
-        foreach (IdTaskContainer container in taskManager.Tasks)
+        foreach (Task task in taskManager.Tasks)
         {
-            var task = (Task)container;
             var root = new Tree(GetStyledTaskInfoString(task));
             DrawTasks(root, task);
             AnsiConsole.Write(root);
@@ -20,9 +18,8 @@ public static class ConsoleDrawer
 
     private static void DrawTasks(Tree parent, Task currentTask)
     {
-        foreach (IdTaskContainer container in currentTask)
+        foreach (Task task in currentTask)
         {
-            var task = (Task)container;
             var child = new Tree(GetStyledTaskInfoString(task));
             parent.AddNode(child);
             DrawTasks(child, task);
@@ -31,11 +28,21 @@ public static class ConsoleDrawer
 
     private static string GetStyledTaskInfoString(Task task)
     {
-        var styledString = task.Id + " " + task.Info;
-        if (task.State == ExecutionState.Completed)
+        var idString = "[[ID: " + task.Id + "]] ";
+        var stateString = "";
+        if ((task.CompletedTasks.Count != 0) || (task.InProgressTasks.Count != 0))
         {
-            styledString = "[green]" + styledString + "[/]";
+            stateString = "[[" + task.CompletedTasks.Count + "/" +
+                          (task.CompletedTasks.Count + task.InProgressTasks.Count) +
+                          "]] ";
         }
-        return styledString;
+
+        string resultString = idString + stateString + task.Info;
+        
+        // if (task.State == ExecutionState.Completed)
+        // {
+        //     styledString = "[green]" + styledString + "[/]";
+        // }
+        return resultString;
     }
 }
