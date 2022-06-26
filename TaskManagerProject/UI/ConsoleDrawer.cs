@@ -30,18 +30,25 @@ public static class ConsoleDrawer
     {
         var idString = "[[ID: " + task.Id + "]] ";
         var stateString = "";
-        if ((task.CompletedTasks.Count != 0) || (task.InProgressTasks.Count != 0))
+        if (task.State == ExecutionState.Completed)
         {
-            stateString = "[[" + task.CompletedTasks.Count + "/" +
-                          (task.CompletedTasks.Count + task.InProgressTasks.Count) +
-                          "]] ";
+            stateString = "[green][[completed]][/] ";
+        }
+        else
+        {
+            if ((task.CompletedTasks.Count != 0) || (task.InProgressTasks.Count != 0))
+            {
+                stateString = "[[" + task.CompletedTasks.Count + "/" +
+                              (task.CompletedTasks.Count + task.InProgressTasks.Count) +
+                              "]] ";
+            }
         }
 
         string resultString = idString + stateString + task.Info;
         
         // if (task.State == ExecutionState.Completed)
         // {
-        //     styledString = "[green]" + styledString + "[/]";
+        //     resultString = "[green]" + resultString + "[/]";
         // }
         return resultString;
     }

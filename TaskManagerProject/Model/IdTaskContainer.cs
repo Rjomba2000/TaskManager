@@ -53,19 +53,27 @@ public class IdTaskContainer : IEnumerable
 
     public void CompleteTask(int taskId)
     {
-        foreach (Task task in this)
+        foreach (var task in _inProgressTasks)
         {
             if (task.Id == taskId)
             {
-                _completedTasks.Add(task);
-                _inProgressTasks.Remove(task);
                 task.State = ExecutionState.Completed;
-                return;
             }
             else
             {
                 task.CompleteTask(taskId);
+                if ((task._inProgressTasks.Count == 0) && (task._completedTasks.Count != 0))
+                {
+                    task.State = ExecutionState.Completed;
+                }
             }
+        }
+
+        Task? completedTask;
+        while ((completedTask = _inProgressTasks.Find(task => task.State == ExecutionState.Completed)) != null)
+        {
+            _completedTasks.Add(completedTask);
+            _inProgressTasks.Remove(completedTask);
         }
     }
 
