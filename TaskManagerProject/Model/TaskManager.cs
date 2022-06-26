@@ -7,12 +7,12 @@ public class TaskManager
 {
     public TaskManager()
     {
-        _tasks = new IdContainer<Task>(_freeIdGiver);
+        _tasks = new IdTaskContainer(_freeIdGiver);
     }
 
     public void AddTask(string taskInfo)
     {
-        _tasks.AddElement(new Task(_freeIdGiver, taskInfo));
+        _tasks.AddTask(new Task(_freeIdGiver, taskInfo));
     }
 
     public void AddSubtask(int parentTaskId, string subtaskInfo)
@@ -20,7 +20,7 @@ public class TaskManager
         var parentTask = (Task?)_tasks.FindById(parentTaskId);
         if (parentTask != null)
         {
-            parentTask.AddElement(new Task(_freeIdGiver, subtaskInfo));
+            parentTask.AddTask(new Task(_freeIdGiver, subtaskInfo));
         }
         else
         {
@@ -30,22 +30,14 @@ public class TaskManager
 
     public void CompleteTask(int taskId)
     {
-        var task = (Task?)_tasks.FindById(taskId);
-        if (task != null)
-        {
-            task.State = ExecutionState.Completed;
-        }
-        else
-        {
-            //error
-        }
+        Tasks.CompleteTask(taskId);
     }
 
     public void DeleteTask(int deletedElementId)
     {
         if (_tasks.FindById(deletedElementId) != null)
         {
-            _tasks.DeleteElement(deletedElementId);
+            _tasks.DeleteTaskById(deletedElementId);
         }
         else
         {
@@ -53,7 +45,7 @@ public class TaskManager
         }
     }
 
-    public IdContainer<Task> Tasks => _tasks;
-    private IdContainer<Task> _tasks;
+    public IdTaskContainer Tasks => _tasks;
+    private IdTaskContainer _tasks;
     private IdGiver _freeIdGiver = new IdGiver();
 }

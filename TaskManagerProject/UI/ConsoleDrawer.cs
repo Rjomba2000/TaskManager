@@ -9,10 +9,7 @@ public static class ConsoleDrawer
 {
     public static void DrawAllTasks(TaskManager taskManager)
     {
-        var taskList = taskManager.Tasks.Elements;
-        taskList.Sort(new TaskComparer());
-        
-        foreach (var container in taskList)
+        foreach (IdTaskContainer container in taskManager.Tasks)
         {
             var task = (Task)container;
             var root = new Tree(GetStyledTaskInfoString(task));
@@ -23,10 +20,7 @@ public static class ConsoleDrawer
 
     private static void DrawTasks(Tree parent, Task currentTask)
     {
-        var taskList = currentTask.Elements;
-        taskList.Sort(new TaskComparer());
-        
-        foreach (var container in taskList)
+        foreach (IdTaskContainer container in currentTask)
         {
             var task = (Task)container;
             var child = new Tree(GetStyledTaskInfoString(task));
@@ -37,7 +31,7 @@ public static class ConsoleDrawer
 
     private static string GetStyledTaskInfoString(Task task)
     {
-        string styledString = task.Id + " " + task.Info;
+        var styledString = task.Id + " " + task.Info;
         if (task.State == ExecutionState.Completed)
         {
             styledString = "[green]" + styledString + "[/]";

@@ -3,9 +3,9 @@
 namespace TaskManagerProject.Model;
 using IdTools;
 
-public class TaskComparer : IComparer<IdContainer<Task>>
+public class TaskComparer : IComparer<IdTaskContainer>
 {
-    public int Compare(IdContainer<Task>? container1, IdContainer<Task>? container2)
+    public int Compare(IdTaskContainer? container1, IdTaskContainer? container2)
     {
         if ((container1 is null) || (container2 is null))
         {
