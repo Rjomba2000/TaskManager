@@ -28,27 +28,28 @@ public class IdTaskContainer : IEnumerable
         return null;
     }
 
-    public void DeleteTaskById(int deletedElementId)
+    private static void DeleteTaskInList(int deletedTaskId, List<Task> taskList)
     {
-        foreach (Task task in this)
+        foreach (var task in taskList)
         {
-            if (task.Id == deletedElementId)
+            if (task.Id == deletedTaskId)
             {
-                if (_completedTasks.Contains(task))
-                {
-                    _completedTasks.Remove(task);
-                }
-                else
-                {
-                    _inProgressTasks.Remove(task);
-                }
+                taskList.Remove(task);
                 return;
             }
             else
             {
-                task.DeleteTaskById(deletedElementId);
+                task.DeleteTaskById(deletedTaskId);
+                TryChangeTaskState(task);
             }
         }
+    }
+
+    public void DeleteTaskById(int deletedTaskId)
+    {
+        DeleteTaskInList(deletedTaskId, _completedTasks);
+        DeleteTaskInList(deletedTaskId, _inProgressTasks);
+        TryMoveSubtasksToCompletedList(this);
     }
 
     public void CompleteTask(int taskId)
@@ -58,23 +59,45 @@ public class IdTaskContainer : IEnumerable
             if (task.Id == taskId)
             {
                 task.State = ExecutionState.Completed;
+                CompleteAllSubtasks(task);
             }
             else
             {
                 task.CompleteTask(taskId);
-                if ((task._inProgressTasks.Count == 0) && (task._completedTasks.Count != 0))
-                {
-                    task.State = ExecutionState.Completed;
-                }
+                TryChangeTaskState(task);
             }
         }
 
-        Task? completedTask;
-        while ((completedTask = _inProgressTasks.Find(task => task.State == ExecutionState.Completed)) != null)
+        TryMoveSubtasksToCompletedList(this);
+    }
+
+    private static void TryChangeTaskState(Task task)
+    {
+        if ((task._inProgressTasks.Count == 0) && (task._completedTasks.Count != 0))
         {
-            _completedTasks.Add(completedTask);
-            _inProgressTasks.Remove(completedTask);
+            task.State = ExecutionState.Completed;
         }
+    }
+
+    private static void TryMoveSubtasksToCompletedList(IdTaskContainer container)
+    {
+        Task? completedTask;
+        while ((completedTask = container._inProgressTasks.Find(task => task.State == ExecutionState.Completed)) != null)
+        {
+            container._completedTasks.Add(completedTask);
+            container._inProgressTasks.Remove(completedTask);
+        }
+    }
+    
+    private static void CompleteAllSubtasks(IdTaskContainer task)
+    {
+        foreach (var subtask in task._inProgressTasks)
+        {
+            subtask.State = ExecutionState.Completed;
+            CompleteAllSubtasks(subtask);
+        }
+
+        TryMoveSubtasksToCompletedList(task);
     }
 
     ~IdTaskContainer()
