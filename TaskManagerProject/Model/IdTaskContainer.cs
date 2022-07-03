@@ -5,10 +5,9 @@ namespace TaskManagerProject.Model;
 
 public class IdTaskContainer : IEnumerable
 {
-    public IdTaskContainer(IdGiver freeIdsGiver)
+    public IdTaskContainer(IdGiver idGiver)
     {
-        _freeIdsGiver = freeIdsGiver;
-        Id = _freeIdsGiver.GiveId();
+        Id = idGiver.GiveId();
     }
     
     public Task? FindById(int lookingId)
@@ -28,27 +27,29 @@ public class IdTaskContainer : IEnumerable
         return null;
     }
 
-    private static void DeleteTaskInList(int deletedTaskId, List<Task> taskList)
+    private void DeleteTaskInList(IdGiver idGiver, int deletedTaskId, List<Task> taskList)
     {
         foreach (var task in taskList)
         {
             if (task.Id == deletedTaskId)
             {
+                idGiver.KeepId(task.Id);
+                task.FreeAllIds(idGiver);
                 taskList.Remove(task);
                 return;
             }
             else
             {
-                task.DeleteTaskById(deletedTaskId);
+                task.DeleteTaskById(idGiver, deletedTaskId);
                 TryChangeTaskState(task);
             }
         }
     }
 
-    public void DeleteTaskById(int deletedTaskId)
+    public void DeleteTaskById(IdGiver idGiver, int deletedTaskId)
     {
-        DeleteTaskInList(deletedTaskId, _completedTasks);
-        DeleteTaskInList(deletedTaskId, _inProgressTasks);
+        DeleteTaskInList(idGiver, deletedTaskId, _completedTasks);
+        DeleteTaskInList(idGiver, deletedTaskId, _inProgressTasks);
         TryMoveSubtasksToCompletedList(this);
     }
 
@@ -100,17 +101,27 @@ public class IdTaskContainer : IEnumerable
         TryMoveSubtasksToCompletedList(task);
     }
 
-    ~IdTaskContainer()
+    private void FreeAllIds(IdGiver idGiver)
     {
-        _freeIdsGiver.KeepId(Id);
+        foreach (Task task in this)
+        {
+            idGiver.KeepId(task.Id);
+            task.FreeAllIds(idGiver);
+        }
     }
 
     public void AddTask(Task task)
     {
-        _inProgressTasks.Add(task);
+        if (task.State == ExecutionState.InProgress)
+        {
+            _inProgressTasks.Add(task);
+        }
+        else
+        {
+            _completedTasks.Add(task);
+        }
     } 
-
-    private IdGiver _freeIdsGiver;
+    
     public int Id { get; init; }
 
     public IEnumerator GetEnumerator() => new TaskContainerEnumerator(_completedTasks, _inProgressTasks);

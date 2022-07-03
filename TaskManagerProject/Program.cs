@@ -12,6 +12,4 @@ manager.AddSubtask(1, "sosat2");
 manager.CompleteTask(6);
 manager.CompleteTask(5);
 ConsoleDrawer.DrawAllTasks(manager);
-Console.WriteLine("");
-manager.DeleteTask(7);
-ConsoleDrawer.DrawAllTasks(manager);
+System.Threading.Thread.Sleep(5000);

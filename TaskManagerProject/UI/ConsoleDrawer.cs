@@ -44,7 +44,7 @@ public static class ConsoleDrawer
             }
         }
 
-        string resultString = idString + stateString + task.Info;
+        string resultString = idString + stateString +  task.Info;
         
         // if (task.State == ExecutionState.Completed)
         // {
