@@ -11,5 +11,7 @@ manager.AddSubtask(2, "srat4");
 manager.AddSubtask(0, "sosat2");
 manager.CompleteTask(5);
 manager.CompleteTask(4);
+manager.CreateGroup("SUPERTASKS");
+manager.AddToGroup(0, "SUPERTASKS");
 ConsoleDrawer.DrawAllTasks(manager);
-System.Threading.Thread.Sleep(5000);
+//System.Threading.Thread.Sleep(5000);

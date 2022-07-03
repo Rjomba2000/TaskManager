@@ -39,7 +39,7 @@ public class TaskManager
 
     public void CreateGroup(string groupName)
     {
-        if (!_groups.TryAdd(groupName, new List<Task>()))
+        if (!_groups.TryAdd(groupName, new Group()))
         {
             //error
         }
@@ -61,17 +61,10 @@ public class TaskManager
     {
         if (!_groups.ContainsKey(groupName))
         {
-            Task? lookingTask = null;
-            foreach (Task task in _tasks)
-            {
-                if (task.Id == taskId)
-                {
-                    lookingTask = task;
-                }
-            }
+            Task? lookingTask = _tasks.FindInRoot(taskId);
             if (lookingTask != null)
             {
-                _groups[groupName].Add(lookingTask);
+                _groups[groupName].AddTask(lookingTask);
             }
             else
             {
@@ -88,10 +81,9 @@ public class TaskManager
     {
         if (!_groups.ContainsKey(groupName))
         {
-            var deletedTask = _groups[groupName].Find(task => task.Id == taskId);
-            if (deletedTask != null)
+            if (_groups[groupName].FindInRoot(taskId) != null)
             {
-                _groups[groupName].Remove(deletedTask);
+                _groups[groupName].Remove(taskId);
             }
             else
             {
@@ -104,8 +96,8 @@ public class TaskManager
         }
     }
 
-    public Dictionary<string, List<Task>> Groups => _groups;
-    private Dictionary<string, List<Task>> _groups = new Dictionary<string, List<Task>>();
+    public Dictionary<string, Group> Groups => _groups;
+    private Dictionary<string, Group> _groups = new Dictionary<string, Group>();
     public IdTaskContainer Tasks => _tasks;
     private IdTaskContainer _tasks = new IdTaskContainer();
     private IdGiver _freeIdGiver = new IdGiver();

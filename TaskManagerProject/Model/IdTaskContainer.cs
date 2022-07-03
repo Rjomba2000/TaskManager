@@ -117,9 +117,22 @@ public class IdTaskContainer : IEnumerable
         }
     }
 
+    public Task? FindInRoot(int lookingId)
+    {
+        foreach (Task task in this)
+        {
+            if (lookingId == task.Id)
+            {
+                return task;
+            }
+        }
+
+        return null;
+    }
+
     public IEnumerator GetEnumerator() => new TaskContainerEnumerator(_completedTasks, _inProgressTasks);
-    private List<Task> _completedTasks = new List<Task>();
+    protected List<Task> _completedTasks = new List<Task>();
     public List<Task> CompletedTasks => _completedTasks;
-    private List<Task> _inProgressTasks = new List<Task>();
+    protected List<Task> _inProgressTasks = new List<Task>();
     public List<Task> InProgressTasks => _inProgressTasks;
 }
