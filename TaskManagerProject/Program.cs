@@ -2,21 +2,17 @@
 using TaskManagerProject.UI;
 
 TaskManager manager = new TaskManager();
-manager.AddTask("sosat");
-manager.AddTask("lezat");
-manager.AddSubtask(0, "srat");
-manager.AddSubtask(2, "srat2");
-manager.AddSubtask(2, "srat3");
-manager.AddSubtask(2, "srat4");
-manager.AddSubtask(0, "sosat2");
+manager.AddTask("do something");
+manager.AddTask("do something else");
+manager.AddSubtask(0, "do something smaller");
+manager.AddSubtask(2, "small task1");
+manager.AddSubtask(2, "small task2");
+manager.AddSubtask(2, "small task3");
+manager.AddSubtask(0, "another small task");
 manager.CompleteTask(5);
 manager.CompleteTask(4);
-manager.CreateGroup("SUPERTASKS");
-manager.CreateGroup("SMALLTASKS");
-manager.AddToGroup(1, "SMALLTASKS");
-manager.AddToGroup(0, "SUPERTASKS");
+manager.CreateGroup("MAIN_TASKS");
+manager.CreateGroup("ANOTHER_TASKS");
+manager.AddToGroup(1, "ANOTHER_TASKS");
+manager.AddToGroup(0, "MAIN_TASKS");
 ConsoleDrawer.DrawAll(manager);
-while (true)
-{
-    
-}
