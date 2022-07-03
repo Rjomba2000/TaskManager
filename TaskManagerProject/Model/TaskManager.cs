@@ -2,11 +2,6 @@
 
 public class TaskManager
 {
-    public TaskManager()
-    {
-        _tasks = new IdTaskContainer(_freeIdGiver);
-    }
-
     public void AddTask(string taskInfo)
     {
         _tasks.AddTask(new Task(_freeIdGiver, taskInfo));
@@ -112,6 +107,6 @@ public class TaskManager
     public Dictionary<string, List<Task>> Groups => _groups;
     private Dictionary<string, List<Task>> _groups = new Dictionary<string, List<Task>>();
     public IdTaskContainer Tasks => _tasks;
-    private IdTaskContainer _tasks;
+    private IdTaskContainer _tasks = new IdTaskContainer();
     private IdGiver _freeIdGiver = new IdGiver();
 }

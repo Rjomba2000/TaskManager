@@ -5,11 +5,6 @@ namespace TaskManagerProject.Model;
 
 public class IdTaskContainer : IEnumerable
 {
-    public IdTaskContainer(IdGiver idGiver)
-    {
-        Id = idGiver.GiveId();
-    }
-    
     public Task? FindById(int lookingId)
     {
         foreach (Task task in this)
@@ -120,9 +115,7 @@ public class IdTaskContainer : IEnumerable
         {
             _completedTasks.Add(task);
         }
-    } 
-    
-    public int Id { get; init; }
+    }
 
     public IEnumerator GetEnumerator() => new TaskContainerEnumerator(_completedTasks, _inProgressTasks);
     private List<Task> _completedTasks = new List<Task>();
