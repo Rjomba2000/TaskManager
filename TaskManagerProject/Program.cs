@@ -16,4 +16,7 @@ manager.CreateGroup("SMALLTASKS");
 manager.AddToGroup(1, "SMALLTASKS");
 manager.AddToGroup(0, "SUPERTASKS");
 ConsoleDrawer.DrawAll(manager);
-//System.Threading.Thread.Sleep(5000);
+while (true)
+{
+    
+}

@@ -30,6 +30,13 @@ public class TaskManager
         if (_tasks.FindById(deletedElementId) != null)
         {
             _tasks.DeleteTaskById(_freeIdGiver, deletedElementId);
+            foreach (var group in _groups)
+            {
+                if (group.Value.FindInRoot(deletedElementId) != null)
+                {
+                    group.Value.Remove(deletedElementId);
+                }
+            }
         }
         else
         {

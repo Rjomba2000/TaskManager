@@ -23,6 +23,7 @@ public static class ConsoleDrawer
         {
             var groupTable = new Table();
             groupTable.AddColumn(group.Key);
+            groupTable.Width(AnsiConsole.Profile.Width);
             foreach (Task task in group.Value)
             {
                 var root = new Tree(GetStyledTaskInfoString(task));

@@ -4,19 +4,19 @@ public class Group : IdTaskContainer
 {
     public void Remove(int deletedTaskId)
     {
-        foreach (var task in _inProgressTasks)
+        foreach (var task in InProgressTasks)
         {
             if (task.Id == deletedTaskId)
             {
-                _inProgressTasks.Remove(task);
+                InProgressTasks.Remove(task);
                 return;
             }
         }
-        foreach (var task in _inProgressTasks)
+        foreach (var task in InProgressTasks)
         {
             if (task.Id == deletedTaskId)
             {
-                _completedTasks.Remove(task);
+                CompletedTasks.Remove(task);
                 return;
             }
         }

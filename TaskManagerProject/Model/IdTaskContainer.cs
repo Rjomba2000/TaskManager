@@ -5,6 +5,10 @@ namespace TaskManagerProject.Model;
 
 public class IdTaskContainer : IEnumerable
 {
+    public IEnumerator GetEnumerator() => new TaskContainerEnumerator(CompletedTasks, InProgressTasks);
+    public readonly List<Task> CompletedTasks = new List<Task>();
+    public readonly List<Task> InProgressTasks = new List<Task>();
+
     public Task? FindById(int lookingId)
     {
         foreach (Task task in this)
@@ -43,14 +47,14 @@ public class IdTaskContainer : IEnumerable
 
     public void DeleteTaskById(IdGiver idGiver, int deletedTaskId)
     {
-        DeleteTaskInList(idGiver, deletedTaskId, _completedTasks);
-        DeleteTaskInList(idGiver, deletedTaskId, _inProgressTasks);
+        DeleteTaskInList(idGiver, deletedTaskId, CompletedTasks);
+        DeleteTaskInList(idGiver, deletedTaskId, InProgressTasks);
         TryMoveSubtasksToCompletedList(this);
     }
 
     public void CompleteTask(int taskId)
     {
-        foreach (var task in _inProgressTasks)
+        foreach (var task in InProgressTasks)
         {
             if (task.Id == taskId)
             {
@@ -69,7 +73,7 @@ public class IdTaskContainer : IEnumerable
 
     private static void TryChangeTaskState(Task task)
     {
-        if ((task._inProgressTasks.Count == 0) && (task._completedTasks.Count != 0))
+        if ((task.InProgressTasks.Count == 0) && (task.CompletedTasks.Count != 0))
         {
             task.State = ExecutionState.Completed;
         }
@@ -78,16 +82,16 @@ public class IdTaskContainer : IEnumerable
     private static void TryMoveSubtasksToCompletedList(IdTaskContainer container)
     {
         Task? completedTask;
-        while ((completedTask = container._inProgressTasks.Find(task => task.State == ExecutionState.Completed)) != null)
+        while ((completedTask = container.InProgressTasks.Find(task => task.State == ExecutionState.Completed)) != null)
         {
-            container._completedTasks.Add(completedTask);
-            container._inProgressTasks.Remove(completedTask);
+            container.CompletedTasks.Add(completedTask);
+            container.InProgressTasks.Remove(completedTask);
         }
     }
     
     private static void CompleteAllSubtasks(IdTaskContainer task)
     {
-        foreach (var subtask in task._inProgressTasks)
+        foreach (var subtask in task.InProgressTasks)
         {
             subtask.State = ExecutionState.Completed;
             CompleteAllSubtasks(subtask);
@@ -109,11 +113,11 @@ public class IdTaskContainer : IEnumerable
     {
         if (task.State == ExecutionState.InProgress)
         {
-            _inProgressTasks.Add(task);
+            InProgressTasks.Add(task);
         }
         else
         {
-            _completedTasks.Add(task);
+            CompletedTasks.Add(task);
         }
     }
 
@@ -129,10 +133,4 @@ public class IdTaskContainer : IEnumerable
 
         return null;
     }
-
-    public IEnumerator GetEnumerator() => new TaskContainerEnumerator(_completedTasks, _inProgressTasks);
-    protected List<Task> _completedTasks = new List<Task>();
-    public List<Task> CompletedTasks => _completedTasks;
-    protected List<Task> _inProgressTasks = new List<Task>();
-    public List<Task> InProgressTasks => _inProgressTasks;
 }
