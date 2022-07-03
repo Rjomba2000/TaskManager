@@ -59,7 +59,7 @@ public class TaskManager
     
     public void AddToGroup(int taskId, string groupName)
     {
-        if (!_groups.ContainsKey(groupName))
+        if (_groups.ContainsKey(groupName))
         {
             Task? lookingTask = _tasks.FindInRoot(taskId);
             if (lookingTask != null)
@@ -79,7 +79,7 @@ public class TaskManager
 
     public void DeleteFromGroup(int taskId, string groupName)
     {
-        if (!_groups.ContainsKey(groupName))
+        if (_groups.ContainsKey(groupName))
         {
             if (_groups[groupName].FindInRoot(taskId) != null)
             {

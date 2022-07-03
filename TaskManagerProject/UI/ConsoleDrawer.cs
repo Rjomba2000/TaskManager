@@ -6,13 +6,30 @@ using Model;
 
 public static class ConsoleDrawer
 {
-    public static void DrawAllTasks(TaskManager taskManager)
+    public static void DrawAll(TaskManager taskManager)
     {
+        DrawGroups(taskManager);
         foreach (Task task in taskManager.Tasks)
         {
             var root = new Tree(GetStyledTaskInfoString(task));
             DrawTasks(root, task);
             AnsiConsole.Write(root);
+        }
+    }
+    
+    private static void DrawGroups(TaskManager taskManager)
+    {
+        foreach (var group in taskManager.Groups)
+        {
+            var groupTable = new Table();
+            groupTable.AddColumn(group.Key);
+            foreach (Task task in group.Value)
+            {
+                var root = new Tree(GetStyledTaskInfoString(task));
+                DrawTasks(root, task);
+                groupTable.AddRow(root);
+            }
+            AnsiConsole.Write(groupTable);
         }
     }
 
